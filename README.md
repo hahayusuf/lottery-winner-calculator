@@ -3,7 +3,7 @@
 ### Verbosity
 You can increase verbosity my changing the value of `verbose` to 1.
 ### Lottery configuration
-The lottery variables are defined in the LOTTO1 variable.
+The lottery variables are defined in the `LOTTO1` variable.
 ```
 const LOTTO1 = {
     lottery_name:"LOTTO1",
@@ -30,8 +30,51 @@ const LOTTO1 = {
 }
 ```
 ## Example commands
+### Example command: class 1
+
+```
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,5,6"
+```
 ### Example command: class 2
 
 ```
-node winner-calculator.js "LOTTO1" "1,2,3,4,5,1" "1,2,3,4,5,6"
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,5,1"
 ```
+
+### Example command: class 3
+
+```
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,35,6"
+```
+
+### Example command: class 4
+
+```
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,35,2"
+```
+
+### Example command: class 5
+
+```
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,34,35,6"
+```
+
+### Example command: class 6
+
+```
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,34,35,3"
+```
+
+
+### Example command: class 7
+
+```
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,30,34,35,6"
+```
+
+### Example command: class 8
+
+```
+node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,30,34,35,10"
+```
+
