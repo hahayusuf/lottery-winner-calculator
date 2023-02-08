@@ -21,6 +21,7 @@ const LOTTO1 = {
         min: 1,
     }
     
+    
 }
 
 run_lottery(LOTTO1,process)
@@ -33,7 +34,8 @@ function run_lottery(LOTTO1,process){
     const winning_pool_one = process.argv[3].split(",");
     const winning_pool_two = winning_pool_one.pop();
     const ticket = process.argv[4].split(",");
-    
+    const ticket_pool_one = process.argv[4].split(",");
+    const ticket_pool_two = ticket_pool_one.pop();
 
     // Checks
     if(lottery_name!=LOTTO1.lottery_name){
@@ -62,7 +64,7 @@ function run_lottery(LOTTO1,process){
     console.info("Pool two:" + winning_pool_two)
 
     // Pool one
-    const PoolOneChecks = calcPoolOneMatches(ticket,winning_pool_one,LOTTO1)
+    const PoolOneChecks = calcPoolMatches(ticket_pool_one,winning_pool_one,LOTTO1.pool_one_count)
 
     if(PoolOneChecks.result==-1){
         throw new Error("Error while looking for pool one matches")
@@ -72,7 +74,7 @@ function run_lottery(LOTTO1,process){
 
     // Pool two
 
-    const PoolTwoChecks = calcPoolTwoMatches(ticket,winning_pool_two,LOTTO1)
+    const PoolTwoChecks = calcPoolMatches(ticket_pool_two,winning_pool_two,LOTTO1.pool_two_count)
     
     if(PoolTwoChecks.result==-1){
         throw new Error("Error while looking for pool two matches")
@@ -115,8 +117,8 @@ function run_lottery(LOTTO1,process){
 }
 
 
-function calcPoolMatches(ticket,pool,pool_spec){
-    if(pool.length!=lottery.pool_spec || ticket.length!=lottery.pool_spec){
+function calcPoolMatches(ticket,pool,pool_count){
+    if(pool.length!=pool_count || ticket.length!=pool_count){
         console.error("calcPoolMatches: unexpected ticket and pool data.")
         return {
             "result": -1
@@ -126,8 +128,8 @@ function calcPoolMatches(ticket,pool,pool_spec){
     let matches=0;
     let matched_numbers="";
 
-    for(let a=0;a<pool_spec.ticket_count;a++){
-        for(let b=0;b<pool_spec.pool_count;b++){
+    for(let a=0;a<pool_count;a++){
+        for(let b=0;b<pool_count;b++){
             if(ticket[a]==pool[b]){
                 matches++
                 matched_numbers+=pool[b]+",";
@@ -143,68 +145,11 @@ function calcPoolMatches(ticket,pool,pool_spec){
 
 }
 
-function calcPoolOneMatches(ticket,poolone,lottery){
-    if(poolone.length!=lottery.pool_one_count || ticket.length!=lottery.ticket_count){
-        console.error("calcPoolOneMatches: unexpected ticket and poolone data.")
-        return {
-            "result": -1
-        }
-    }
-
-    let matches=0;
-    let matched_numbers="";
-
-    for(let a=0;a<lottery.ticket_count;a++){
-        for(let b=0;b<lottery.pool_one_count;b++){
-            if(ticket[a]==poolone[b]){
-                matches++
-                matched_numbers+=poolone[b]+",";
-            }
-        }
-    }
-
-    return {
-        "result":0,
-        "matches": matches,
-        "matched_numbers": matched_numbers.substring(0,matched_numbers.length-1)
-    }
-
-}
-
-
-function calcPoolTwoMatches(ticket,pooltwo,lottery){
-    if(pooltwo.length!=lottery.pool_two_count || ticket.length!=lottery.ticket_count){
-        console.error("calcPoolOneMatches: unexpected ticket and pooltwo data.")
-        return {
-            "result": -1
-        }
-    }
-
-    let matches=0;
-    let matched_numbers="";
-
-    for(let a=0;a<lottery.ticket_count;a++){
-
-        if(ticket[a]==pooltwo){
-            matches++;
-            matched_numbers+=pooltwo;
-        }
-        
-    }
-
-    return {
-        "result":0,
-        "matches": matches,
-        "matched_numbers": matched_numbers
-    }
-
-}
-
 function numberSetChecker(set,range,count){
     if(set.length!=count){
         return {
             result: -1,
-            message: "Unexpected length"
+            message: "Unexpected length of set."
         }
     }
 
