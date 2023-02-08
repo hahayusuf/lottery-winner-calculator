@@ -4,7 +4,7 @@
 You can increase verbosity my changing the value of `verbose` to 1.
 ### Lottery configuration
 The lottery variables are defined in the `LOTTO1` variable.
-```
+```javascript
 const LOTTO1 = {
     lottery_name:"LOTTO1",
     winning_numbers_count: 6,
@@ -32,49 +32,49 @@ const LOTTO1 = {
 ## Example commands
 ### Example command: class 1
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,5,6"
 ```
 ### Example command: class 2
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,5,1"
 ```
 
 ### Example command: class 3
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,35,6"
 ```
 
 ### Example command: class 4
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,35,2"
 ```
 
 ### Example command: class 5
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,34,35,6"
 ```
 
 ### Example command: class 6
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,34,35,3"
 ```
 
 
 ### Example command: class 7
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,30,34,35,6"
 ```
 
 ### Example command: class 8
 
-```
+```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,30,34,35,10"
 ```
 
