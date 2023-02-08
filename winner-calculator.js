@@ -147,7 +147,13 @@ function run_lottery(lott,process,verbose){
 }
 
 function calcPoolMatches(ticket,pool,pool_count){
-    if(pool.length!=pool_count || ticket.length!=pool_count){
+    if(pool_count==1 && (isNaN(ticket) || isNaN(pool))){
+        console.error("calcPoolMatches: unexpected ticket and pool data.")
+        return {
+            "result": -1
+        }
+    } 
+    if(pool_count>1 && (pool.length!=pool_count || ticket.length!=pool_count)){
         console.error("calcPoolMatches: unexpected ticket and pool data.")
         return {
             "result": -1
