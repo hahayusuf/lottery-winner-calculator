@@ -45,37 +45,37 @@ function run_lottery(lott,process,verbose){
 
     // Winning draw checks
     { // Pool one
-        let validData = numberSetChecker(winning_pool_one,lott.PoolOneRange,lott.pool_one_count);
+        let checkData = numberSetChecker(winning_pool_one,lott.PoolOneRange,lott.pool_one_count);
         
-        if(validData.result){
-            console.error(validData)
-            throw new Error({message:"Unexpected error with pool one",validData})
+        if(checkData.result){
+            console.error(checkData)
+            throw new Error({message:"Unexpected error with pool one",checkData})
         }
     }
     { // Pool two
-        let validData = numberSetChecker(winning_pool_two,lott.PoolTwoRange,lott.pool_two_count);
+        let checkData = numberSetChecker(winning_pool_two,lott.PoolTwoRange,lott.pool_two_count);
 
-        if(validData.result){
-            console.error(validData)
-            throw new Error({message:"Unexpected error with pool two",validData})
+        if(checkData.result){
+            console.error(checkData)
+            throw new Error({message:"Unexpected error with pool two",checkData})
         }
     }
 
     // Ticket checks
     { // Pool one
-        let validData = numberSetChecker(ticket_pool_one,lott.PoolOneRange,lott.pool_one_count);
+        let checkData = numberSetChecker(ticket_pool_one,lott.PoolOneRange,lott.pool_one_count);
         
-        if(validData.result){
-            console.error(validData)
+        if(checkData.result){
+            console.error(checkData)
             throw new Error({message:"Unexpected error with ticket pool one"})
         }
     }
     { // Pool two
-        let validData = numberSetChecker(ticket_pool_two,lott.PoolTwoRange,lott.pool_two_count);
+        let checkData = numberSetChecker(ticket_pool_two,lott.PoolTwoRange,lott.pool_two_count);
 
-        if(validData.result){
-            console.error(validData)
-            throw new Error({message:"Unexpected error with ticket pool two",validData})
+        if(checkData.result){
+            console.error(checkData)
+            throw new Error({message:"Unexpected error with ticket pool two",checkData})
         }
     }
 
