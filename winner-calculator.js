@@ -20,13 +20,12 @@ const LOTTO1 = {
         max: 10,
         min: 1,
     }
-    
-    
+
 }
 
 run_lottery(LOTTO1,process)
 
-function run_lottery(LOTTO1,process){
+function run_lottery(lott,process){
 
     console.info("winner-calculator.js running")
     const lottery_name = process.argv[2];
@@ -38,22 +37,24 @@ function run_lottery(LOTTO1,process){
     const ticket_pool_two = ticket_pool_one.pop();
 
     // Checks
-    if(lottery_name!=LOTTO1.lottery_name){
+    if(lottery_name!=lott.lottery_name){
         throw new Error("Invalid lottery name")
     }
 
-    var validData = numberSetChecker(winning_pool_one,LOTTO1.PoolOneRange,LOTTO1.pool_one_count);
-    
-    if(validData.result){
-        throw new Error({message:"Unexpected error with pool one",validData})
+    {
+        let validData = numberSetChecker(winning_pool_one,lott.PoolOneRange,lott.pool_one_count);
+        
+        if(validData.result){
+            throw new Error({message:"Unexpected error with pool one",validData})
+        }
     }
+    {
+        let validData = numberSetChecker(winning_pool_two,lott.PoolTwoRange,lott.pool_two_count);
 
-    var validData = numberSetChecker(winning_pool_two,LOTTO1.PoolTwoRange,LOTTO1.pool_two_count);
-
-    if(validData.result){
-        throw new Error({message:"Unexpected error with pool two",validData})
+        if(validData.result){
+            throw new Error({message:"Unexpected error with pool two",validData})
+        }
     }
-
 
     // Informative output
     console.info("Lottery name: " +lottery_name)
@@ -64,7 +65,7 @@ function run_lottery(LOTTO1,process){
     console.info("Pool two:" + winning_pool_two)
 
     // Pool one
-    const PoolOneChecks = calcPoolMatches(ticket_pool_one,winning_pool_one,LOTTO1.pool_one_count)
+    const PoolOneChecks = calcPoolMatches(ticket_pool_one,winning_pool_one,lott.pool_one_count)
 
     if(PoolOneChecks.result==-1){
         throw new Error("Error while looking for pool one matches")
@@ -74,7 +75,7 @@ function run_lottery(LOTTO1,process){
 
     // Pool two
 
-    const PoolTwoChecks = calcPoolMatches(ticket_pool_two,winning_pool_two,LOTTO1.pool_two_count)
+    const PoolTwoChecks = calcPoolMatches(ticket_pool_two,winning_pool_two,lott.pool_two_count)
     
     if(PoolTwoChecks.result==-1){
         throw new Error("Error while looking for pool two matches")
@@ -84,8 +85,8 @@ function run_lottery(LOTTO1,process){
 
     // Generate output
 
-    var PrizeAmount = "";
-    var PrizeClass = "";
+    let PrizeAmount = "";
+    let PrizeClass = "";
 
     if(PoolOneChecks.matches<2){
         console.log("This ticket did not win a prize.")
@@ -93,13 +94,13 @@ function run_lottery(LOTTO1,process){
     }
 
     if(PoolOneChecks.matches && !PoolTwoChecks.matches){
-        PrizeAmount = LOTTO1.PoolOnePrizes[PoolOneChecks.matches-2];
-        PrizeClass = LOTTO1.PoolOneClass[PoolOneChecks.matches-2];
+        PrizeAmount = lott.PoolOnePrizes[PoolOneChecks.matches-2];
+        PrizeClass = lott.PoolOneClass[PoolOneChecks.matches-2];
     }
 
     if(PoolOneChecks.matches && PoolTwoChecks.matches){
-        PrizeAmount = LOTTO1.PoolTwoPrizes[PoolOneChecks.matches-2];
-        PrizeClass = LOTTO1.PoolTwoClass[PoolOneChecks.matches-2];
+        PrizeAmount = lott.PoolTwoPrizes[PoolOneChecks.matches-2];
+        PrizeClass = lott.PoolTwoClass[PoolOneChecks.matches-2];
     }
 
     console.log("This ticket won a prize of class "+PrizeClass+" and amount £"+PrizeAmount+".")
@@ -153,7 +154,7 @@ function numberSetChecker(set,range,count){
         }
     }
 
-    for(var ii=0;ii<count;ii++){
+    for(let ii=0;ii<count;ii++){
         if(isNaN(set[ii])){
             return {
                 result: -1,
@@ -168,8 +169,8 @@ function numberSetChecker(set,range,count){
         }
     }
 
-    for(var a=0;a<count;a++){
-        for(var b=0;b<count;b++){
+    for(let a=0;a<count;a++){
+        for(let b=0;b<count;b++){
             if(a==b){
                 continue
             }
@@ -189,6 +190,4 @@ function numberSetChecker(set,range,count){
 
 }
 
-export default {
-    run_lottery
-};
+
