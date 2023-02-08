@@ -29,7 +29,21 @@ const LOTTO1 = {
 
 }
 ```
-## Example commands
+## Usage
+### Command-line
+```bash
+node winner-calculator.js lottery-name draw ticket
+```
+Current supported values for `lottery-name` is `"LOTTO1"`. The draws and tickets should have the same length and contain the pools in sequence i.e. `poolone,pooltwo`. So a total of six numbers e.g `"10,25,9,12,36,6"`.
+
+Structure of draws and tickets for `"LOTTO1"` is defined as below:
+| Pool      |  Count |   Min    |  Max      |
+| --------- |     --:|       --:|        --:|
+| One       | 5      | 1        | 35        |
+| Two       | 1      | 1        | 10        |
+
+
+## Examples
 ### Class 1
 
 ```bash
