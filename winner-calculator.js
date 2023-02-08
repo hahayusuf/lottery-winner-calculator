@@ -2,16 +2,25 @@
 const LOTTO1 = {
     lottery_name:"LOTTO1",
     winning_numbers_count: 6,
-    single_ticket_count: 6,
+    ticket_count: 6,
     
     pool_one_count: 5,
     pool_two_count: 1,
 
     PoolOnePrizes: ["2","30","500","100,000"],
     PoolOneClass: ["8","6","4","2"],
+    PoolOneRange: {
+        max: 35,
+        min: 1,
+    },
 
     PoolTwoPrizes: ["5","100","10,000","10,000,000"],
     PoolTwoClass: ["7","5","3","1"],
+    PoolTwoRange: {
+        max: 10,
+        min: 1,
+    }
+    
 }
 
 run_lottery(LOTTO1,process)
@@ -21,45 +30,39 @@ function run_lottery(LOTTO1,process){
     console.info("winner-calculator.js running")
     const lottery_name = process.argv[2];
     const winning_numbers = process.argv[3].split(",");
-    const pool_one = process.argv[3].split(",");
-    const single_ticket = process.argv[4].split(",");
-    const pool_two = pool_one.pop();
+    const winning_pool_one = process.argv[3].split(",");
+    const winning_pool_two = winning_pool_one.pop();
+    const ticket = process.argv[4].split(",");
+    
 
     // Checks
     if(lottery_name!=LOTTO1.lottery_name){
         throw new Error("Invalid lottery name")
     }
 
-    for(var ii=0;ii<LOTTO1.winning_numbers_count;ii++){
-        if(isNaN(winning_numbers(ii))){
-            throw new Error("Invalid winning number detected in position: "+ii)
-        }
+    var validData = numberSetChecker(winning_pool_one,LOTTO1.PoolOneRange,LOTTO1.pool_one_count);
+    
+    if(validData.result){
+        throw new Error({message:"Unexpected error with pool one",validData})
     }
 
-    if(winning_numbers.length!=LOTTO1.winning_numbers_count){
-        throw new Error("Invalid winning numbers length: "+ winning_numbers)
+    var validData = numberSetChecker(winning_pool_two,LOTTO1.PoolTwoRange,LOTTO1.pool_two_count);
+
+    if(validData.result){
+        throw new Error({message:"Unexpected error with pool two",validData})
     }
 
-    for(var ii=0;ii<LOTTO1.single_ticket_count;ii++){
-        if(isNaN(single_ticket(ii))){
-            throw new Error("Invalid single number detected in position: "+ii)
-        }
-    }
-
-    if(single_ticket.length!=LOTTO1.single_ticket_count){
-        throw new Error("Invalid single ticket numbers")
-    }
 
     // Informative output
     console.info("Lottery name: " +lottery_name)
     console.info("Winning numbers:" + winning_numbers)
-    console.info("Single ticket:" + single_ticket)
+    console.info("Single ticket:" + ticket)
     console.info("-------------------------------------")
-    console.info("Pool one:" + pool_one)
-    console.info("Pool two:" + pool_two)
+    console.info("Pool one:" + winning_pool_one)
+    console.info("Pool two:" + winning_pool_two)
 
     // Pool one
-    const PoolOneChecks = calcPoolOneMatches(single_ticket,pool_one,LOTTO1)
+    const PoolOneChecks = calcPoolOneMatches(ticket,winning_pool_one,LOTTO1)
 
     if(PoolOneChecks.result==-1){
         throw new Error("Error while looking for pool one matches")
@@ -69,7 +72,7 @@ function run_lottery(LOTTO1,process){
 
     // Pool two
 
-    const PoolTwoChecks = calcPoolTwoMatches(single_ticket,pool_two,LOTTO1)
+    const PoolTwoChecks = calcPoolTwoMatches(ticket,winning_pool_two,LOTTO1)
     
     if(PoolTwoChecks.result==-1){
         throw new Error("Error while looking for pool two matches")
@@ -111,9 +114,10 @@ function run_lottery(LOTTO1,process){
 
 }
 
-function calcPoolOneMatches(single_ticket,poolone,lottery){
-    if(poolone.length!=lottery.pool_one_count || single_ticket.length!=lottery.single_ticket_count){
-        console.error("calcPoolOneMatches: unexpected single_ticket and poolone data.")
+
+function calcPoolMatches(ticket,pool,pool_spec){
+    if(pool.length!=lottery.pool_spec || ticket.length!=lottery.pool_spec){
+        console.error("calcPoolMatches: unexpected ticket and pool data.")
         return {
             "result": -1
         }
@@ -122,9 +126,37 @@ function calcPoolOneMatches(single_ticket,poolone,lottery){
     let matches=0;
     let matched_numbers="";
 
-    for(let a=0;a<lottery.single_ticket_count;a++){
+    for(let a=0;a<pool_spec.ticket_count;a++){
+        for(let b=0;b<pool_spec.pool_count;b++){
+            if(ticket[a]==pool[b]){
+                matches++
+                matched_numbers+=pool[b]+",";
+            }
+        }
+    }
+
+    return {
+        "result":0,
+        "matches": matches,
+        "matched_numbers": matched_numbers.substring(0,matched_numbers.length-1)
+    }
+
+}
+
+function calcPoolOneMatches(ticket,poolone,lottery){
+    if(poolone.length!=lottery.pool_one_count || ticket.length!=lottery.ticket_count){
+        console.error("calcPoolOneMatches: unexpected ticket and poolone data.")
+        return {
+            "result": -1
+        }
+    }
+
+    let matches=0;
+    let matched_numbers="";
+
+    for(let a=0;a<lottery.ticket_count;a++){
         for(let b=0;b<lottery.pool_one_count;b++){
-            if(single_ticket[a]==poolone[b]){
+            if(ticket[a]==poolone[b]){
                 matches++
                 matched_numbers+=poolone[b]+",";
             }
@@ -140,9 +172,9 @@ function calcPoolOneMatches(single_ticket,poolone,lottery){
 }
 
 
-function calcPoolTwoMatches(single_ticket,pooltwo,lottery){
-    if(pooltwo.length!=lottery.pool_two_count || single_ticket.length!=lottery.single_ticket_count){
-        console.error("calcPoolOneMatches: unexpected single_ticket and pooltwo data.")
+function calcPoolTwoMatches(ticket,pooltwo,lottery){
+    if(pooltwo.length!=lottery.pool_two_count || ticket.length!=lottery.ticket_count){
+        console.error("calcPoolOneMatches: unexpected ticket and pooltwo data.")
         return {
             "result": -1
         }
@@ -151,9 +183,9 @@ function calcPoolTwoMatches(single_ticket,pooltwo,lottery){
     let matches=0;
     let matched_numbers="";
 
-    for(let a=0;a<lottery.single_ticket_count;a++){
+    for(let a=0;a<lottery.ticket_count;a++){
 
-        if(single_ticket[a]==pooltwo){
+        if(ticket[a]==pooltwo){
             matches++;
             matched_numbers+=pooltwo;
         }
@@ -164,6 +196,50 @@ function calcPoolTwoMatches(single_ticket,pooltwo,lottery){
         "result":0,
         "matches": matches,
         "matched_numbers": matched_numbers
+    }
+
+}
+
+function numberSetChecker(set,range,count){
+    if(set.length!=count){
+        return {
+            result: -1,
+            message: "Unexpected length"
+        }
+    }
+
+    for(var ii=0;ii<count;ii++){
+        if(isNaN(set[ii])){
+            return {
+                result: -1,
+                message: "Non-numeric data detected at index "+ ii
+            }
+        }
+        if(+set[ii]>range.max || +set[ii]<range.min){
+            return {
+                result: -1,
+                message: "Out of range value detected at index "+ ii
+            }
+        }
+    }
+
+    for(var a=0;a<count;a++){
+        for(var b=0;b<count;b++){
+            if(a==b){
+                continue
+            }
+            if(set[a]==set[b]){
+                return {
+                    result: -1,
+                    message: "Duplicate found between indexes "+ a+","+b
+                }
+            }
+        }
+    }
+
+    return {
+        result: 0,
+        message: "Healthy data."
     }
 
 }
