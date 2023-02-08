@@ -1,5 +1,5 @@
 
-let verbose=0;
+let verbose=1;
 
 const LOTTO1 = {
     lottery_name:"LOTTO1",
@@ -181,10 +181,18 @@ function calcPoolMatches(ticket,pool,pool_count){
 }
 
 function numberSetChecker(set,range,count){
-    if(set.length!=count){
+    if(count==1 && isNaN(set)){
         return {
             result: -1,
-            message: "Unexpected length of set."
+            message: "Unexpected length of set: it is supposed to be single number.",
+            set: set
+        }
+    }
+    if(count>1 && set.length!=count){
+        return {
+            result: -1,
+            message: "Unexpected length of set: target length is "+count,
+            set: set
         }
     }
 
@@ -192,13 +200,15 @@ function numberSetChecker(set,range,count){
         if(isNaN(set[ii])){
             return {
                 result: -1,
-                message: "Non-numeric data detected at index "+ ii
+                message: "Non-numeric data detected at index "+ ii,
+                set: set
             }
         }
         if(+set[ii]>range.max || +set[ii]<range.min){
             return {
                 result: -1,
-                message: "Out of range value detected at index "+ ii
+                message: "Out of range value detected at index "+ ii,
+                set: set
             }
         }
     }
@@ -211,7 +221,8 @@ function numberSetChecker(set,range,count){
             if(set[a]==set[b]){
                 return {
                     result: -1,
-                    message: "Duplicate found between indexes "+ a+","+b
+                    message: "Duplicate found between indexes "+ a+","+b,
+                    set: set
                 }
             }
         }
@@ -219,7 +230,8 @@ function numberSetChecker(set,range,count){
 
     return {
         result: 0,
-        message: "Healthy data."
+        message: "Healthy data.",
+        set: set
     }
 
 }
