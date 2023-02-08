@@ -23,9 +23,11 @@ const LOTTO1 = {
 
 }
 
-run_lottery(LOTTO1,process)
+let verbose=1;
 
-function run_lottery(lott,process){
+run_lottery(LOTTO1,process,verbose)
+
+function run_lottery(lott,process,verbose){
 
     console.info("winner-calculator.js running")
     const lottery_name = process.argv[2];
@@ -41,50 +43,77 @@ function run_lottery(lott,process){
         throw new Error("Invalid lottery name")
     }
 
-    {
+    // Winning draw checks
+    { // Pool one
         let validData = numberSetChecker(winning_pool_one,lott.PoolOneRange,lott.pool_one_count);
         
         if(validData.result){
+            console.error(validData)
             throw new Error({message:"Unexpected error with pool one",validData})
         }
     }
-    {
+    { // Pool two
         let validData = numberSetChecker(winning_pool_two,lott.PoolTwoRange,lott.pool_two_count);
 
         if(validData.result){
+            console.error(validData)
             throw new Error({message:"Unexpected error with pool two",validData})
         }
     }
 
-    // Informative output
-    console.info("Lottery name: " +lottery_name)
-    console.info("Winning numbers:" + winning_numbers)
-    console.info("Single ticket:" + ticket)
-    console.info("-------------------------------------")
-    console.info("Pool one:" + winning_pool_one)
-    console.info("Pool two:" + winning_pool_two)
+    // Ticket checks
+    { // Pool one
+        let validData = numberSetChecker(ticket_pool_one,lott.PoolOneRange,lott.pool_one_count);
+        
+        if(validData.result){
+            console.error(validData)
+            throw new Error({message:"Unexpected error with ticket pool one"})
+        }
+    }
+    { // Pool two
+        let validData = numberSetChecker(ticket_pool_two,lott.PoolTwoRange,lott.pool_two_count);
 
-    // Pool one
+        if(validData.result){
+            console.error(validData)
+            throw new Error({message:"Unexpected error with ticket pool two",validData})
+        }
+    }
+
+    
+
+    // Matching
+    // Pool one 
     const PoolOneChecks = calcPoolMatches(ticket_pool_one,winning_pool_one,lott.pool_one_count)
 
     if(PoolOneChecks.result==-1){
         throw new Error("Error while looking for pool one matches")
     }
 
-    // console.log("Pool one matches:"+ PoolOneChecks.matches)
-
     // Pool two
-
     const PoolTwoChecks = calcPoolMatches(ticket_pool_two,winning_pool_two,lott.pool_two_count)
     
     if(PoolTwoChecks.result==-1){
         throw new Error("Error while looking for pool two matches")
     }
 
-    // console.log("Pool two matches:"+ PoolTwoChecks.matches)
+    if(verbose){
+        // Informative output
+        console.info("Lottery name: " +lottery_name)
+        console.info("Winning numbers:" + winning_numbers)
+        console.info("Single ticket:" + ticket)
+        console.info("-------------------------------------")
+        console.info("Winning draw pool one:" + winning_pool_one)
+        console.info("Winning draw pool two:" + winning_pool_two)
+        console.info("-------------------------------------")
+        console.info("Ticket pool one:" + ticket_pool_one)
+        console.info("Ticket pool two:" + ticket_pool_two)
+        console.info("-------------------------------------")
+        console.log("Pool one matches:"+ PoolOneChecks.matches)
+        console.log("Pool two matches:"+ PoolTwoChecks.matches)
+        console.info("-------------------------------------")
+    }
 
     // Generate output
-
     let PrizeAmount = "";
     let PrizeClass = "";
 
@@ -116,7 +145,6 @@ function run_lottery(lott,process){
     return 0;
 
 }
-
 
 function calcPoolMatches(ticket,pool,pool_count){
     if(pool.length!=pool_count || ticket.length!=pool_count){
