@@ -33,10 +33,10 @@ function run_lottery(lott,process,verbose){
     const lottery_name = process.argv[2];
     const winning_numbers = process.argv[3].split(",");
     const winning_pool_one = process.argv[3].split(",");
-    const winning_pool_two = winning_pool_one.pop();
+    const winning_pool_two = [winning_pool_one.pop()];
     const ticket = process.argv[4].split(",");
     const ticket_pool_one = process.argv[4].split(",");
-    const ticket_pool_two = ticket_pool_one.pop();
+    const ticket_pool_two = [ticket_pool_one.pop()];
 
     // Checks
     if(lottery_name!=lott.lottery_name){
@@ -146,14 +146,8 @@ function run_lottery(lott,process,verbose){
 
 }
 
-function calcPoolMatches(ticket,pool,pool_count){
-    if(pool_count==1 && (isNaN(ticket) || isNaN(pool))){
-        console.error("calcPoolMatches: unexpected ticket and pool data.")
-        return {
-            "result": -1
-        }
-    } 
-    if(pool_count>1 && (pool.length!=pool_count || ticket.length!=pool_count)){
+function calcPoolMatches(ticket,pool,pool_count){ 
+    if(pool.length!=pool_count || ticket.length!=pool_count){
         console.error("calcPoolMatches: unexpected ticket and pool data.")
         return {
             "result": -1
@@ -181,14 +175,7 @@ function calcPoolMatches(ticket,pool,pool_count){
 }
 
 function numberSetChecker(set,range,count){
-    if(count==1 && isNaN(set)){
-        return {
-            result: -1,
-            message: "Unexpected length of set: it is supposed to be single number.",
-            set: set
-        }
-    }
-    if(count>1 && set.length!=count){
+    if(set.length!=count){
         return {
             result: -1,
             message: "Unexpected length of set: target length is "+count,
