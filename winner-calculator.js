@@ -1,4 +1,6 @@
 
+let verbose=0;
+
 const LOTTO1 = {
     lottery_name:"LOTTO1",
     winning_numbers_count: 6,
@@ -23,13 +25,11 @@ const LOTTO1 = {
 
 }
 
-let verbose=1;
-
 run_lottery(LOTTO1,process,verbose)
 
 function run_lottery(lott,process,verbose){
 
-    console.info("winner-calculator.js running")
+    
     const lottery_name = process.argv[2];
     const winning_numbers = process.argv[3].split(",");
     const winning_pool_one = process.argv[3].split(",");
