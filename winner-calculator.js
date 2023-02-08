@@ -30,8 +30,20 @@ function run_lottery(LOTTO1,process){
         throw new Error("Invalid lottery name")
     }
 
+    for(var ii=0;ii<LOTTO1.winning_numbers_count;ii++){
+        if(isNaN(winning_numbers(ii))){
+            throw new Error("Invalid winning number detected in position: "+ii)
+        }
+    }
+
     if(winning_numbers.length!=LOTTO1.winning_numbers_count){
-        throw new Error("Invalid winning numbers: "+ winning_numbers)
+        throw new Error("Invalid winning numbers length: "+ winning_numbers)
+    }
+
+    for(var ii=0;ii<LOTTO1.single_ticket_count;ii++){
+        if(isNaN(single_ticket(ii))){
+            throw new Error("Invalid single number detected in position: "+ii)
+        }
     }
 
     if(single_ticket.length!=LOTTO1.single_ticket_count){
@@ -58,7 +70,7 @@ function run_lottery(LOTTO1,process){
     // Pool two
 
     const PoolTwoChecks = calcPoolTwoMatches(single_ticket,pool_two,LOTTO1)
-    console.log(PoolTwoChecks)
+    
     if(PoolTwoChecks.result==-1){
         throw new Error("Error while looking for pool two matches")
     }
@@ -67,11 +79,10 @@ function run_lottery(LOTTO1,process){
 
     // Generate output
 
-    const PrizeMatches = PoolOneChecks.matches+PoolTwoChecks.matches
-    let PrizeAmount = "";
-    let PrizeClass = "";
+    var PrizeAmount = "";
+    var PrizeClass = "";
 
-    if(PrizeMatches<2){
+    if(PoolOneChecks.matches<2){
         console.log("This ticket did not win a prize.")
         return 0;
     }
@@ -134,7 +145,6 @@ function calcPoolTwoMatches(single_ticket,pooltwo,lottery){
         console.error("calcPoolOneMatches: unexpected single_ticket and pooltwo data.")
         return {
             "result": -1
-            
         }
     }
 
