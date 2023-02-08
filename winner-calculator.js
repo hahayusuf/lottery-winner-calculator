@@ -1,5 +1,5 @@
 
-let verbose=1;
+let verbose=0;
 
 const LOTTO1 = {
     lottery_name:"LOTTO1",
