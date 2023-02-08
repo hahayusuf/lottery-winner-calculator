@@ -189,6 +189,6 @@ function numberSetChecker(set,range,count){
 
 }
 
-module.exports = {
+export default {
     run_lottery
 };
