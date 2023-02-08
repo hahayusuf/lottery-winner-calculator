@@ -30,49 +30,49 @@ const LOTTO1 = {
 }
 ```
 ## Example commands
-### Example command: class 1
+### Class 1
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,5,6"
 ```
-### Example command: class 2
+### Class 2
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,5,1"
 ```
 
-### Example command: class 3
+### Class 3
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,35,6"
 ```
 
-### Example command: class 4
+### Class 4
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,4,35,2"
 ```
 
-### Example command: class 5
+### Class 5
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,34,35,6"
 ```
 
-### Example command: class 6
+### Class 6
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,3,34,35,3"
 ```
 
 
-### Example command: class 7
+### Class 7
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,30,34,35,6"
 ```
 
-### Example command: class 8
+### Class 8
 
 ```bash
 node winner-calculator.js "LOTTO1" "1,2,3,4,5,6" "1,2,30,34,35,10"
